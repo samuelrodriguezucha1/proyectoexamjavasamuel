@@ -125,7 +125,7 @@ public class Main {
         float precio;
         TipoCombustion tipoCombustion;
         String matricula;
-        
+
         System.out.println("Introduce el id");
         id = scanner.nextLine();
         System.out.println("Introduce la marca ");
@@ -140,10 +140,10 @@ public class Main {
         System.out.println("Introduce el precio");
         precio = scanner.nextFloat();
         scanner.nextLine();
-        System.out.println("Indique si es 1- ELECTRICO, " +
-"   2- GASOLINA, " +
-"   3- DIESEL, " +
-"    4- HIBRIDO");
+        System.out.println("Indique si es 1- ELECTRICO, "
+                + "   2- GASOLINA, "
+                + "   3- DIESEL, "
+                + "    4- HIBRIDO");
         int tipoC = scanner.nextInt();
         tipoCombustion = TipoCombustion.values()[tipoC];
         scanner.nextLine();
@@ -152,26 +152,25 @@ public class Main {
         System.out.println("Indique el tipo de vehiculo: 1- furgoneta, 2- suv, 3- turismo");
         int tipoV = scanner.nextInt();
         Vehiculo vehiculo;
-        
-        switch (tipoV){
+
+        switch (tipoV) {
             case 1:
                 System.out.println("introduce la capacidad");
                 float peso = scanner.nextFloat();
                 vehiculo = new Furgoneta(peso, id, marca, modelo, año, color, precio, tipoCombustion, matricula);
                 break;
-            case 2: 
+            case 2:
                 vehiculo = new Suv(id, marca, modelo, año, color, precio, tipoCombustion, matricula);
                 break;
-            case 3: 
+            case 3:
                 vehiculo = new Turismo(id, marca, modelo, año, color, precio, tipoCombustion, matricula);
                 break;
-            default: 
+            default:
                 vehiculo = null;
-                
+
         }
         concesionario.insertarVehiculo(vehiculo);
         System.out.println("El vehiculo se registro con exito");
-        
 
     }
 
@@ -278,23 +277,54 @@ public class Main {
     private static void consultarMarcaVehicuolo() {
         System.out.println("Introduce la marqca que quieres consultar");
         String marca = scanner.nextLine();
-        for(Vehiculo v : concesionario.getVehiculos()){
-            if(v.getMarca().equalsIgnoreCase(marca)){
-                System.out.println("id: "+ v.getId()+ " modelo: "+ v.getModelo()+" año: "+ v.getAño()+ " matricula "+ v.getMatricula());
+        for (Vehiculo v : concesionario.getVehiculos()) {
+            if (v.getMarca().equalsIgnoreCase(marca)) {
+                System.out.println("id: " + v.getId() + " modelo: " + v.getModelo() + " año: " + v.getAño() + " matricula " + v.getMatricula());
             }
         }
-        
+
     }
 
     private static void consultarRegistroVenta() {
 
-        for (Venta venta : concesionario.getProductos()) {
-            System.out.println(venta.toString());
+        System.out.println("indique el mes y el año que desea consultar (MM/YYYY)");
+        String fecha = scanner.nextLine();
+        String[] partes = fecha.split("/");
+
+        if (partes.length != 2) {
+            System.out.println("formato de fecha incorrecto");
+
+        } else {
+
+            for (Venta ventas : concesionario.getProductos()) {
+                if (ventas.getFechaInicio().getMonthValue() == Integer.parseInt(partes[0])) {
+                    System.out.println(ventas.toString());
+                }
+            }
+
         }
+
     }
 
     private static void consultarClienteProductop() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("indique si quiere consultar: ventas(V), leasing(L) o renting(R)");
+        String venta = scanner.nextLine();
+        if (!(venta.equalsIgnoreCase("V") || venta.equalsIgnoreCase("R") || venta.equalsIgnoreCase("L"))) {
+            System.out.println("opcion incorrecta");
+
+        } else {
+
+            for (Venta ventas : concesionario.getProductos()) {
+                if (venta.equalsIgnoreCase("R") && ventas instanceof Renting) {
+                    System.out.println(ventas.toString());
+                } else if (venta.equalsIgnoreCase("L") && ventas instanceof Leasing) {
+                    System.out.println(ventas.toString());
+                } else {
+                    System.out.println(ventas.toString());
+                }
+            }
+
+        }
     }
 
     private static Cliente solicitarCliente() {
