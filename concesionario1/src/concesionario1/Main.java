@@ -120,10 +120,10 @@ public class Main {
         String id;
         String marca;
         String modelo;
-        int año;
+        int año = 0;
         String color;
-        float precio;
-        TipoCombustion tipoCombustion;
+        float precio = 0;
+        TipoCombustion tipoCombustion = TipoCombustion.DIESEL;
         String matricula;
 
         System.out.println("Introduce el id");
@@ -132,32 +132,91 @@ public class Main {
         marca = scanner.nextLine();
         System.out.println("Introduce el modelo ");
         modelo = scanner.nextLine();
-        System.out.println("Introduce el año ");
-        año = scanner.nextInt();
-        scanner.nextLine();
+        boolean error = true;
+        while(error){
+            try{
+                System.out.println("Introduce el año ");
+                año = scanner.nextInt();
+                if (año < 1970 || año > LocalDate.now().getYear()){
+                    System.out.println("Valor de año inválido");
+                }else{
+                    error = false;
+                }
+            } catch (Exception e){
+                System.out.println("Debe introducir un valor numérico ");
+            }
+            scanner.nextLine();
+        }
         System.out.println("Introduce el color");
         color = scanner.nextLine();
-        System.out.println("Introduce el precio");
-        precio = scanner.nextFloat();
-        scanner.nextLine();
-        System.out.println("Indique si es 1- ELECTRICO, "
-                + "   2- GASOLINA, "
-                + "   3- DIESEL, "
-                + "    4- HIBRIDO");
-        int tipoC = scanner.nextInt();
-        tipoCombustion = TipoCombustion.values()[tipoC];
-        scanner.nextLine();
+        error = true;
+        while(error){
+            try{
+                System.out.println("Introduce el precio");
+                precio = scanner.nextFloat();
+                if (precio <= 0){
+                    System.out.println("El precio debe ser un valor mayor que cero");
+                }else{
+                    error = false;
+                }
+            } catch (Exception e){
+                System.out.println("Debe introducir un valor numérico ");
+            }
+            scanner.nextLine();
+        }
+        error = true;
+        while(error){
+            System.out.println("Indique si es 1- ELECTRICO, "
+                    + "   2- GASOLINA, "
+                    + "   3- DIESEL, "
+                    + "    4- HIBRIDO");
+            try{
+                int tipoC = scanner.nextInt();
+                if (tipoC < 1 || tipoC > 4){
+                    System.out.println("Introduzca un valor entre 1 y 4");
+                }else{
+                    tipoCombustion = TipoCombustion.values()[tipoC];
+                    error = false;
+                }                
+            }catch(Exception e){
+                System.out.println("Debe introducir un valor numérico ");
+            }
+            scanner.nextLine();
+        }
         System.out.println("Introduce la matricula");
         matricula = scanner.nextLine();
-        System.out.println("Indique el tipo de vehiculo: 1- furgoneta, 2- suv, 3- turismo");
-        int tipoV = scanner.nextInt();
-        Vehiculo vehiculo;
+        int tipoV = 0;
+        error = true;
+        while(error){
+            try{
+                System.out.println("Indique el tipo de vehiculo: 1- furgoneta, 2- suv, 3- turismo");
+                tipoV = scanner.nextInt();
+                if (tipoV < 1 || tipoV > 3){
+                    System.out.println("Introduzca un valor entre 1 y 3");
+                }else{
+                    error = false;
+                }
+            }catch(Exception e){
+                System.out.println("Debe introducir un valor numérico ");
+            }
+            scanner.nextLine();
+        }
+        Vehiculo vehiculo = null;
 
         switch (tipoV) {
             case 1:
-                System.out.println("introduce la capacidad");
-                float peso = scanner.nextFloat();
-                vehiculo = new Furgoneta(peso, id, marca, modelo, año, color, precio, tipoCombustion, matricula);
+                error = true;
+                while(error){
+                    try{
+                        System.out.println("introduce la capacidad");
+                        float peso = scanner.nextFloat();
+                        vehiculo = new Furgoneta(peso, id, marca, modelo, año, color, precio, tipoCombustion, matricula);
+                        error = false;
+                    }catch(Exception e){
+                        System.out.println("Debe introducir un valor numérico ");
+                    }
+                    scanner.nextLine();                    
+                }
                 break;
             case 2:
                 vehiculo = new Suv(id, marca, modelo, año, color, precio, tipoCombustion, matricula);
@@ -167,10 +226,13 @@ public class Main {
                 break;
             default:
                 vehiculo = null;
-
         }
-        concesionario.insertarVehiculo(vehiculo);
-        System.out.println("El vehiculo se registro con exito");
+        if (vehiculo != null){
+            concesionario.insertarVehiculo(vehiculo);
+            System.out.println("El vehiculo se registro con exito");
+        }else{
+            System.out.println("Problemas en el registro del vehículo. No se ha realizado");
+        }
 
     }
 
@@ -179,10 +241,19 @@ public class Main {
         String dni = scanner.nextLine();
 
         if (solicitarDatosPersona('C', dni)) {
-            System.out.println("Introduce la fecha de registro del cliente (DD-MM-YYYY)");
-            String fecha = scanner.nextLine();
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-            LocalDate fechaRegistro = LocalDate.parse(fecha, dtf);
+            boolean error = true;
+            LocalDate fechaRegistro=null;
+            while(error){
+                try{
+                    System.out.println("Introduce la fecha de registro del cliente (DD-MM-YYYY)");
+                    String fecha = scanner.nextLine();
+                    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                    fechaRegistro = LocalDate.parse(fecha, dtf);
+                    error= false;
+                }catch(Exception e){
+                    System.out.println("La fecha debe estar en formato DD-MM-YYYY ");
+                }
+            }
             int indice = concesionario.comprobarCliente(dni);
             concesionario.getClientes().get(indice).setFechaIn(fechaRegistro);
             concesionario.getClientes().get(indice).setFechaF(null);
@@ -197,19 +268,36 @@ public class Main {
         String dni = scanner.nextLine();
 
         if (solicitarDatosPersona('E', dni)) {
-            LocalDate fechaContratacion;
+            LocalDate fechaContratacion = null;
             LocalDate fechaBaja = null;
-            float salario;
+            float salario = 0;
             String departamento;
 
             System.out.println("A que departamento pertenece");
             departamento = scanner.nextLine();
-            System.out.println("Indique la fecha de contratacion (DD-MM-YYYY)");
-            String fecha = scanner.nextLine();
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-            fechaContratacion = LocalDate.parse(fecha, dtf);
-            System.out.println("Indique el salario");
-            salario = scanner.nextFloat();
+            boolean error = true;
+            while (error){
+                System.out.println("Indique la fecha de contratacion (DD-MM-YYYY)");
+                String fecha = scanner.nextLine();
+                try{
+                    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                    fechaContratacion = LocalDate.parse(fecha, dtf);
+                    error = false;
+                }catch (Exception e){
+                    System.out.println("El formato de la fecha debe ser DD-MM-YYYY");
+                }
+            }
+            error = true;
+            while(error){
+                try{
+                    System.out.println("Indique el salario");
+                    salario = scanner.nextFloat();
+                    error=false;
+                }catch (Exception e){
+                    System.out.println("El salario debe ser un valor numérico");
+                }
+                scanner.nextLine();
+            }
             int indice = concesionario.comprobarEmpleado(dni);
             concesionario.getEmpleados().get(indice).setDepartamento(departamento);
             concesionario.getEmpleados().get(indice).setFechaContratacion(fechaContratacion);
@@ -262,11 +350,20 @@ public class Main {
                 Empleado empleado = new Administrativo(nombre, primerApellido, segundoApellido, dni, mail, direccion, telefono);
                 concesionario.insertarEmpleado(empleado);
             } else {
-                System.out.println("Introduzca la comision");
-                float comision = scanner.nextFloat();
-                scanner.nextLine();
-                Empleado empleado = new Comercial(comision, nombre, primerApellido, segundoApellido, dni, mail, direccion, telefono);
-                concesionario.insertarEmpleado(empleado);
+                boolean error = true;
+                while (error){
+                    System.out.println("Introduzca la comision");
+                    try{
+                        float comision = scanner.nextFloat();
+                        
+                        Empleado empleado = new Comercial(comision, nombre, primerApellido, segundoApellido, dni, mail, direccion, telefono);
+                        concesionario.insertarEmpleado(empleado);
+                        error = false;
+                    }catch (Exception e){
+                        System.out.println("La comisión debe ser una valor numérico");
+                    }
+                    scanner.nextLine();
+                }
             }
 
         }
@@ -378,17 +475,41 @@ public class Main {
                 Vehiculo vehiculo = concesionario.obtenerVehiculo(existeV);
                 System.out.println("Introduce el dni del empleado");
                 String dniEmpleado = scanner.nextLine();
-
+                LocalDate fechaVenta = null;
+                float importeVenta = 0;
+                float importeCuota = 0;
+                int numCuota = 0;
+                LocalDate fechaFin = null;
                 int existeE = concesionario.comprobarEmpleado(dniEmpleado);
                 if (existeE == -1) {
                     System.out.println("El empleado no esta registrado, registrelo");
                 } else {
                     Empleado empleado = concesionario.obtenerEmpleado(existeE);
-                    System.out.println("Indique la fecha de la venta (DD-MM-YYYY)");
-                    LocalDate fechaVenta = LocalDate.parse(scanner.nextLine(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-                    System.out.println("Introduce el importe de la venta");
-                    float importeVenta = scanner.nextFloat();
-
+                    boolean error = true;
+                    while(error){
+                        try{
+                            System.out.println("Indique la fecha de la venta (DD-MM-YYYY)");
+                            fechaVenta = LocalDate.parse(scanner.nextLine(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+                            error = false;
+                        }catch (Exception e){
+                            System.out.println("El formato de la fecha debe ser DD-MM-YYYY");
+                        }
+                    }
+                    error = true;
+                    while(error){
+                        try{
+                            System.out.println("Introduce el importe de la venta");
+                            importeVenta = scanner.nextFloat();
+                            if (importeVenta <= 0){
+                                System.out.println("El importe de la venta debe ser mayor que cero");
+                            }else {
+                                error = false;
+                            }
+                        }catch (Exception e){
+                            System.out.println("El importe debe ser un valor numérico");
+                        }   
+                        scanner.nextLine();
+                    }
                     switch (tipoOperacion) {
                         case 'V':
 
@@ -400,13 +521,48 @@ public class Main {
 
                         case 'R':
                         case 'L':
-                            System.out.println("Introduce el importe de la la cuota");
-                            float importeCuota = scanner.nextFloat();
-                            System.out.println("Introduce el numero de cuotas");
-                            int numCuota = scanner.nextInt();
-                            System.out.println("Indique la fecha de la venta (DD-MM-YYYY)");
-                            LocalDate fechaFin = LocalDate.parse(scanner.nextLine(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-
+                            error = true;
+                            while(error){                                    
+                                try{
+                                    System.out.println("Introduce el importe de la la cuota");
+                                    importeCuota = scanner.nextFloat();
+                                    if (importeVenta <= 0){
+                                        System.out.println("El importe de la cuota debe ser mayor que cero");
+                                    }else {
+                                        error = false;
+                                    }
+                                }catch (Exception e){
+                                    System.out.println("El importe debe ser un valor numérico");
+                                }   
+                                scanner.nextLine();
+                            }
+                            error = true;
+                            while(error){
+                                    
+                                try{
+                                    System.out.println("Introduce el numero de cuotas");
+                                    numCuota = scanner.nextInt();
+                                    if (numCuota <= 0){
+                                        System.out.println("El numero de cuotas debe ser mayor que cero");
+                                    }else {
+                                        error = false;
+                                    }
+                                }catch (Exception e){
+                                    System.out.println("El numero de cuotas debe ser un valor numérico");
+                                }   
+                                scanner.nextLine();
+                            }
+                            error = true;
+                            while(error){
+                                try{
+                                    System.out.println("Indique la fecha de la finalización (DD-MM-YYYY)");
+                                    fechaFin = LocalDate.parse(scanner.nextLine(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+                                    error = false;
+                                }catch (Exception e){
+                                    System.out.println("El formato de la fecha debe ser DD-MM-YYYY");
+                                }
+                                scanner.nextLine();
+                            }
                             if (tipoOperacion == 'R') {
                                 Renting renting = new Renting(importeCuota, fechaFin, numCuota, "R", importeVenta, fechaVenta, cliente, vehiculo, empleado);
                                 concesionario.insertarProducto(renting);
