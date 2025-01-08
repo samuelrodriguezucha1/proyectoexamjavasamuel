@@ -100,7 +100,7 @@ public class Main {
             }
 
         } while (opcion < 0 || opcion > 9);
-
+        scanner.nextLine();
         return opcion;
     }
 
@@ -179,7 +179,7 @@ public class Main {
         String dni = scanner.nextLine();
 
         if (solicitarDatosPersona('C', dni)) {
-            System.out.println("Introduce la fecha de registro del cliente ( DD-MM-YYYY");
+            System.out.println("Introduce la fecha de registro del cliente (DD-MM-YYYY)");
             String fecha = scanner.nextLine();
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             LocalDate fechaRegistro = LocalDate.parse(fecha, dtf);
@@ -204,7 +204,7 @@ public class Main {
 
             System.out.println("A que departamento pertenece");
             departamento = scanner.nextLine();
-            System.out.println("Indique la fecha de contratacion dd-MM-yyyy");
+            System.out.println("Indique la fecha de contratacion (DD-MM-YYYY)");
             String fecha = scanner.nextLine();
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             fechaContratacion = LocalDate.parse(fecha, dtf);
@@ -264,7 +264,7 @@ public class Main {
             } else {
                 System.out.println("Introduzca la comision");
                 float comision = scanner.nextFloat();
-
+                scanner.nextLine();
                 Empleado empleado = new Comercial(comision, nombre, primerApellido, segundoApellido, dni, mail, direccion, telefono);
                 concesionario.insertarEmpleado(empleado);
             }
@@ -275,12 +275,17 @@ public class Main {
     }
 
     private static void consultarMarcaVehicuolo() {
-        System.out.println("Introduce la marqca que quieres consultar");
+        System.out.println("Introduce la marca que quieres consultar");
         String marca = scanner.nextLine();
+        boolean hayVehiculos = false;
         for (Vehiculo v : concesionario.getVehiculos()) {
             if (v.getMarca().equalsIgnoreCase(marca)) {
                 System.out.println("id: " + v.getId() + " modelo: " + v.getModelo() + " año: " + v.getAño() + " matricula " + v.getMatricula());
+                hayVehiculos = true;
             }
+        }
+        if (!hayVehiculos){
+            System.out.println("No hay vehiculos registrados de esa marca");
         }
 
     }
@@ -295,13 +300,16 @@ public class Main {
             System.out.println("formato de fecha incorrecto");
 
         } else {
-
+            boolean hayVentas = false; 
             for (Venta ventas : concesionario.getProductos()) {
                 if (ventas.getFechaInicio().getMonthValue() == Integer.parseInt(partes[0])) {
                     System.out.println(ventas.toString());
+                    hayVentas = true;
                 }
             }
-
+            if (!hayVentas){
+                System.out.println("No hay operaciones registradas en ese mes y año");
+            }
         }
 
     }
@@ -313,14 +321,26 @@ public class Main {
             System.out.println("opcion incorrecta");
 
         } else {
-
+            boolean hayVentas = false;
             for (Venta ventas : concesionario.getProductos()) {
                 if (venta.equalsIgnoreCase("R") && ventas instanceof Renting) {
                     System.out.println(ventas.toString());
+                    hayVentas = true;
                 } else if (venta.equalsIgnoreCase("L") && ventas instanceof Leasing) {
                     System.out.println(ventas.toString());
+                    hayVentas = true;
                 } else {
                     System.out.println(ventas.toString());
+                    hayVentas = true;
+                }
+            }
+            if (!hayVentas){
+                if (venta.equalsIgnoreCase("R")) {
+                    System.out.println("No hay clientes con Renting");
+                } else if (venta.equalsIgnoreCase("L")) {
+                    System.out.println("No hay clientes con Leasing");
+                } else {
+                    System.out.println("No hay clientes con Ventas");
                 }
             }
 
@@ -364,7 +384,7 @@ public class Main {
                     System.out.println("El empleado no esta registrado, registrelo");
                 } else {
                     Empleado empleado = concesionario.obtenerEmpleado(existeE);
-                    System.out.println("Indique la fecha de la venta");
+                    System.out.println("Indique la fecha de la venta (DD-MM-YYYY)");
                     LocalDate fechaVenta = LocalDate.parse(scanner.nextLine(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
                     System.out.println("Introduce el importe de la venta");
                     float importeVenta = scanner.nextFloat();
@@ -384,7 +404,7 @@ public class Main {
                             float importeCuota = scanner.nextFloat();
                             System.out.println("Introduce el numero de cuotas");
                             int numCuota = scanner.nextInt();
-                            System.out.println("Indique la fecha de la venta");
+                            System.out.println("Indique la fecha de la venta (DD-MM-YYYY)");
                             LocalDate fechaFin = LocalDate.parse(scanner.nextLine(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 
                             if (tipoOperacion == 'R') {
@@ -397,9 +417,8 @@ public class Main {
                                 boolean opcionCompra = respuesta.equalsIgnoreCase("SI");
                                 Leasing leasing = new Leasing("L", importeVenta, fechaVenta, cliente, vehiculo, empleado, importeCuota, opcionCompra, fechaFin, numCuota);
                                 concesionario.insertarProducto(leasing);
-                                System.out.println("Leasing realizado coln exito");
+                                System.out.println("Leasing realizado con exito");
                             }
-
                             break;
                         default:
                             break;

@@ -46,7 +46,7 @@ public class Renting extends Venta{
 
     @Override
     public String toString() {
-        return "Renting{" + super.toString() + "cuota=" + cuota + ", fechaFin=" + fechaFin + ", numCuotas=" + numCuotas + '}';
+        return "Renting{" + super.datosBase() + ", cuota=" + cuota + ", fechaFin=" + fechaFin + ", numCuotas=" + numCuotas + '}';
     }
     
     

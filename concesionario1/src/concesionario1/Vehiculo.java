@@ -98,5 +98,11 @@ public abstract class Vehiculo {
     public void setMatricula(String matricula) {
         this.matricula = matricula;
     }
+
+    @Override
+    public String toString() {
+        return "Id=" + id + ", marca=" + marca + ", modelo=" + modelo + ", año=" + año + ", color=" + color + ", matricula=" + matricula;
+    }
+    
     
 }

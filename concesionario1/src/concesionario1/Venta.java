@@ -82,8 +82,13 @@ public class Venta {
 
     @Override
     public String toString() {
-        return "Venta{" + "identificador=" + identificador + ", importeTotal=" + importeTotal + ", fechaInicio=" + fechaInicio + ", cliente=" + cliente + ", vehiculo=" + vehiculo + ", vendedor=" + vendedor + '}';
+        return "Venta{ identificador=" + identificador + ", importeTotal=" + importeTotal + ", fechaInicio=" + fechaInicio + ", cliente=" + cliente + ", vehiculo=" + vehiculo + ", vendedor=" + vendedor + '}';
+    }
+    
+    public String datosBase() {
+        return "Identificador=" + identificador + ", importeTotal=" + importeTotal + ", fechaInicio=" + fechaInicio + ", cliente=" + cliente + ", vehiculo=" + vehiculo + ", vendedor=" + vendedor;
     }
       
     
 }
+
