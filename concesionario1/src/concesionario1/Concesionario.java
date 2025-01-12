@@ -95,7 +95,7 @@ public class Concesionario {
         
         return clientes.get(posicion);
     }
-    
+     
     public boolean eliminarCliente(String dni){
         
         int posicionCliente = comprobarCliente(dni);
