@@ -92,15 +92,19 @@ public class Main {
             System.out.println("0. SALIR");
 
             System.out.println("SELECIONE LA OPCION QUE QUIERA");
-
+            try {
             opcion = scanner.nextInt();
             if (opcion < 0 || opcion > 9) {
                 System.out.println("OPCION INVALIDA");
 
             }
+            }catch(Exception e ){
+                System.out.println("la opcion introducida es incorrecta");
+            }
+            scanner.nextLine ();
 
         } while (opcion < 0 || opcion > 9);
-        scanner.nextLine();
+        //scanner.nextLine();
         return opcion;
     }
 
@@ -133,16 +137,16 @@ public class Main {
         System.out.println("Introduce el modelo ");
         modelo = scanner.nextLine();
         boolean error = true;
-        while(error){
-            try{
+        while (error) {
+            try {
                 System.out.println("Introduce el año ");
                 año = scanner.nextInt();
-                if (año < 1970 || año > LocalDate.now().getYear()){
+                if (año < 1970 || año > LocalDate.now().getYear()) {
                     System.out.println("Valor de año inválido");
-                }else{
+                } else {
                     error = false;
                 }
-            } catch (Exception e){
+            } catch (Exception e) {
                 System.out.println("Debe introducir un valor numérico ");
             }
             scanner.nextLine();
@@ -150,35 +154,35 @@ public class Main {
         System.out.println("Introduce el color");
         color = scanner.nextLine();
         error = true;
-        while(error){
-            try{
+        while (error) {
+            try {
                 System.out.println("Introduce el precio");
                 precio = scanner.nextFloat();
-                if (precio <= 0){
+                if (precio <= 0) {
                     System.out.println("El precio debe ser un valor mayor que cero");
-                }else{
+                } else {
                     error = false;
                 }
-            } catch (Exception e){
+            } catch (Exception e) {
                 System.out.println("Debe introducir un valor numérico ");
             }
             scanner.nextLine();
         }
         error = true;
-        while(error){
+        while (error) {
             System.out.println("Indique si es 1- ELECTRICO, "
                     + "   2- GASOLINA, "
                     + "   3- DIESEL, "
                     + "    4- HIBRIDO");
-            try{
+            try {
                 int tipoC = scanner.nextInt();
-                if (tipoC < 1 || tipoC > 4){
+                if (tipoC < 1 || tipoC > 4) {
                     System.out.println("Introduzca un valor entre 1 y 4");
-                }else{
+                } else {
                     tipoCombustion = TipoCombustion.values()[tipoC];
                     error = false;
-                }                
-            }catch(Exception e){
+                }
+            } catch (Exception e) {
                 System.out.println("Debe introducir un valor numérico ");
             }
             scanner.nextLine();
@@ -187,16 +191,16 @@ public class Main {
         matricula = scanner.nextLine();
         int tipoV = 0;
         error = true;
-        while(error){
-            try{
+        while (error) {
+            try {
                 System.out.println("Indique el tipo de vehiculo: 1- furgoneta, 2- suv, 3- turismo");
                 tipoV = scanner.nextInt();
-                if (tipoV < 1 || tipoV > 3){
+                if (tipoV < 1 || tipoV > 3) {
                     System.out.println("Introduzca un valor entre 1 y 3");
-                }else{
+                } else {
                     error = false;
                 }
-            }catch(Exception e){
+            } catch (Exception e) {
                 System.out.println("Debe introducir un valor numérico ");
             }
             scanner.nextLine();
@@ -206,16 +210,16 @@ public class Main {
         switch (tipoV) {
             case 1:
                 error = true;
-                while(error){
-                    try{
+                while (error) {
+                    try {
                         System.out.println("introduce la capacidad");
                         float peso = scanner.nextFloat();
                         vehiculo = new Furgoneta(peso, id, marca, modelo, año, color, precio, tipoCombustion, matricula);
                         error = false;
-                    }catch(Exception e){
+                    } catch (Exception e) {
                         System.out.println("Debe introducir un valor numérico ");
                     }
-                    scanner.nextLine();                    
+                    scanner.nextLine();
                 }
                 break;
             case 2:
@@ -227,10 +231,10 @@ public class Main {
             default:
                 vehiculo = null;
         }
-        if (vehiculo != null){
+        if (vehiculo != null) {
             concesionario.insertarVehiculo(vehiculo);
             System.out.println("El vehiculo se registro con exito");
-        }else{
+        } else {
             System.out.println("Problemas en el registro del vehículo. No se ha realizado");
         }
 
@@ -242,15 +246,15 @@ public class Main {
 
         if (solicitarDatosPersona('C', dni)) {
             boolean error = true;
-            LocalDate fechaRegistro=null;
-            while(error){
-                try{
+            LocalDate fechaRegistro = null;
+            while (error) {
+                try {
                     System.out.println("Introduce la fecha de registro del cliente (DD-MM-YYYY)");
                     String fecha = scanner.nextLine();
                     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
                     fechaRegistro = LocalDate.parse(fecha, dtf);
-                    error= false;
-                }catch(Exception e){
+                    error = false;
+                } catch (Exception e) {
                     System.out.println("La fecha debe estar en formato DD-MM-YYYY ");
                 }
             }
@@ -276,24 +280,24 @@ public class Main {
             System.out.println("A que departamento pertenece");
             departamento = scanner.nextLine();
             boolean error = true;
-            while (error){
+            while (error) {
                 System.out.println("Indique la fecha de contratacion (DD-MM-YYYY)");
                 String fecha = scanner.nextLine();
-                try{
+                try {
                     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
                     fechaContratacion = LocalDate.parse(fecha, dtf);
                     error = false;
-                }catch (Exception e){
+                } catch (Exception e) {
                     System.out.println("El formato de la fecha debe ser DD-MM-YYYY");
                 }
             }
             error = true;
-            while(error){
-                try{
+            while (error) {
+                try {
                     System.out.println("Indique el salario");
                     salario = scanner.nextFloat();
-                    error=false;
-                }catch (Exception e){
+                    error = false;
+                } catch (Exception e) {
                     System.out.println("El salario debe ser un valor numérico");
                 }
                 scanner.nextLine();
@@ -351,15 +355,15 @@ public class Main {
                 concesionario.insertarEmpleado(empleado);
             } else {
                 boolean error = true;
-                while (error){
+                while (error) {
                     System.out.println("Introduzca la comision");
-                    try{
+                    try {
                         float comision = scanner.nextFloat();
-                        
+
                         Empleado empleado = new Comercial(comision, nombre, primerApellido, segundoApellido, dni, mail, direccion, telefono);
                         concesionario.insertarEmpleado(empleado);
                         error = false;
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         System.out.println("La comisión debe ser una valor numérico");
                     }
                     scanner.nextLine();
@@ -381,7 +385,7 @@ public class Main {
                 hayVehiculos = true;
             }
         }
-        if (!hayVehiculos){
+        if (!hayVehiculos) {
             System.out.println("No hay vehiculos registrados de esa marca");
         }
 
@@ -397,14 +401,14 @@ public class Main {
             System.out.println("formato de fecha incorrecto");
 
         } else {
-            boolean hayVentas = false; 
+            boolean hayVentas = false;
             for (Venta ventas : concesionario.getProductos()) {
                 if (ventas.getFechaInicio().getMonthValue() == Integer.parseInt(partes[0])) {
                     System.out.println(ventas.toString());
                     hayVentas = true;
                 }
             }
-            if (!hayVentas){
+            if (!hayVentas) {
                 System.out.println("No hay operaciones registradas en ese mes y año");
             }
         }
@@ -431,7 +435,7 @@ public class Main {
                     hayVentas = true;
                 }
             }
-            if (!hayVentas){
+            if (!hayVentas) {
                 if (venta.equalsIgnoreCase("R")) {
                     System.out.println("No hay clientes con Renting");
                 } else if (venta.equalsIgnoreCase("L")) {
@@ -486,28 +490,28 @@ public class Main {
                 } else {
                     Empleado empleado = concesionario.obtenerEmpleado(existeE);
                     boolean error = true;
-                    while(error){
-                        try{
+                    while (error) {
+                        try {
                             System.out.println("Indique la fecha de la venta (DD-MM-YYYY)");
                             fechaVenta = LocalDate.parse(scanner.nextLine(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
                             error = false;
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             System.out.println("El formato de la fecha debe ser DD-MM-YYYY");
                         }
                     }
                     error = true;
-                    while(error){
-                        try{
+                    while (error) {
+                        try {
                             System.out.println("Introduce el importe de la venta");
                             importeVenta = scanner.nextFloat();
-                            if (importeVenta <= 0){
+                            if (importeVenta <= 0) {
                                 System.out.println("El importe de la venta debe ser mayor que cero");
-                            }else {
+                            } else {
                                 error = false;
                             }
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             System.out.println("El importe debe ser un valor numérico");
-                        }   
+                        }
                         scanner.nextLine();
                     }
                     switch (tipoOperacion) {
@@ -522,43 +526,43 @@ public class Main {
                         case 'R':
                         case 'L':
                             error = true;
-                            while(error){                                    
-                                try{
+                            while (error) {
+                                try {
                                     System.out.println("Introduce el importe de la la cuota");
                                     importeCuota = scanner.nextFloat();
-                                    if (importeVenta <= 0){
+                                    if (importeVenta <= 0) {
                                         System.out.println("El importe de la cuota debe ser mayor que cero");
-                                    }else {
+                                    } else {
                                         error = false;
                                     }
-                                }catch (Exception e){
+                                } catch (Exception e) {
                                     System.out.println("El importe debe ser un valor numérico");
-                                }   
+                                }
                                 scanner.nextLine();
                             }
                             error = true;
-                            while(error){
-                                    
-                                try{
+                            while (error) {
+
+                                try {
                                     System.out.println("Introduce el numero de cuotas");
                                     numCuota = scanner.nextInt();
-                                    if (numCuota <= 0){
+                                    if (numCuota <= 0) {
                                         System.out.println("El numero de cuotas debe ser mayor que cero");
-                                    }else {
+                                    } else {
                                         error = false;
                                     }
-                                }catch (Exception e){
+                                } catch (Exception e) {
                                     System.out.println("El numero de cuotas debe ser un valor numérico");
-                                }   
+                                }
                                 scanner.nextLine();
                             }
                             error = true;
-                            while(error){
-                                try{
+                            while (error) {
+                                try {
                                     System.out.println("Indique la fecha de la finalización (DD-MM-YYYY)");
                                     fechaFin = LocalDate.parse(scanner.nextLine(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
                                     error = false;
-                                }catch (Exception e){
+                                } catch (Exception e) {
                                     System.out.println("El formato de la fecha debe ser DD-MM-YYYY");
                                 }
                                 scanner.nextLine();
