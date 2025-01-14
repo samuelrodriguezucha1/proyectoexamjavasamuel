@@ -519,7 +519,7 @@ public class Main {
 
                             Venta venta = new Venta("V", importeVenta, fechaVenta, cliente, vehiculo, empleado);
                             concesionario.insertarProducto(venta);
-                            System.out.println("Venta realizado con exito");
+                            System.out.println("Operacion realizado con exito");
 
                             break;
 
